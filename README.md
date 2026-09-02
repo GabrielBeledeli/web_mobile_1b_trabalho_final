@@ -1,141 +1,149 @@
-# web_mobile_1b_trabalho_final
-🎮 Jogo da Forca
+# 🎮 Jogo da Forca — Trabalho Final (Web & Mobile)
 
-Aplicativo de Jogo da Forca desenvolvido em Flutter como trabalho final do primeiro bimestre da disciplina de Desenvolvimento de Sistemas para WEB/Mobile IV.
+Projeto acadêmico desenvolvido em **Flutter** para a disciplina de **Desenvolvimento de Sistemas para WEB/Mobile IV** (Trabalho Final 1B).
 
-O projeto foi desenvolvido com o objetivo de aplicar conceitos de desenvolvimento de aplicações mobile utilizando Flutter e Dart, com uma interface interativa e componentes reutilizáveis.
+---
 
-📱 Sobre o projeto
+## 🎯 Visão Geral e Regras
 
-O Jogo da Forca é uma aplicação na qual o jogador deve descobrir uma palavra secreta tentando acertar suas letras.
+1. **Objetivo**: Descobrir a palavra secreta sorteada antes de cometer **6 erros** (número máximo de tentativas incorretas).
+2. **Tema das Palavras**: Termos do universo de desenvolvimento e tecnologia (`FLUTTER`, `DEVELOPER`, `DART`, `TECLADO`, `PROGRAMACAO`, `CELULAR`, `COMPUTADOR`, `NOTEBOOK`, `WIDGET`, `FORCA`).
+3. **Feedback no Teclado**:
+   - Letra correta: o botão fica **verde**.
+   - Letra incorreta: o botão fica **cinza**.
+   - Letras já jogadas ou quando o jogo termina: o botão fica desabilitado para evitar cliques repetidos.
+4. **Fim de Jogo**:
+   - **Vitória**: Jogador acertou todas as letras da palavra.
+   - **Derrota**: Jogador atingiu o limite de 6 erros e o boneco da forca foi completado.
+   - Em ambos os casos, um cartão de resultado é exibido flutuando no centro da tela com o botão para iniciar uma nova partida, e o resultado é salvo no histórico.
 
-A cada tentativa incorreta, uma nova parte da forca é apresentada. O jogador deve descobrir a palavra antes que o personagem seja completamente desenhado.
+---
 
-O projeto também possui uma tela de histórico das partidas, permitindo consultar resultados anteriores.
+## 📁 Estrutura do Projeto
 
-✨ Funcionalidades
-🎯 Jogo de Forca interativo
-🔤 Teclado virtual para seleção das letras
-❤️ Controle das tentativas disponíveis
-🪢 Representação visual da forca
-🏆 Exibição do resultado da partida
-📜 Histórico de partidas
-🔄 Possibilidade de iniciar uma nova partida
-📱 Interface desenvolvida para aplicações Flutter
-🧩 Componentização da interface através de widgets reutilizáveis
-🛠️ Tecnologias utilizadas
-Flutter
-Dart
-Material Design
-Cupertino Icons
-Flutter Lints
+```text
+web_mobile_1b_trabalho_final/
+│
+├── README.md                          # Documentação geral do repositório
+└── jogo_da_forca/                     # Projeto Flutter
+    ├── pubspec.yaml                   # Dependências e assets do projeto
+    ├── assets/
+    │   └── images/                    # Imagens da forca (forca_0 a 6) e line.png
+    └── lib/
+        ├── main.dart                  # Ponto de entrada do aplicativo
+        ├── pages/
+        │   ├── jogo_da_forca_page.dart # Tela principal do jogo (StatefulWidget)
+        │   └── history_page.dart      # Tela de histórico de partidas
+        └── widgets/
+            ├── barra_tentativas_widget.dart # Cartão do contador de tentativas
+            ├── button_widget.dart           # Botão individual do teclado
+            ├── forca_widget.dart            # Desenho da forca + traços e letras
+            ├── letras_digitadas_widget.dart # Painel com as letras já jogadas
+            ├── resultado_widget.dart        # Balão flutuante de vitória/derrota
+            └── teclado_widget.dart          # Teclado completo
+```
 
+---
 
-🚀 Como executar o projeto
-Pré-requisitos
+## 🏛️ Arquitetura e Gerenciamento de Estado
 
-Antes de executar o projeto, é necessário ter instalado:
+- **StatefulWidget Centralizado (`JogoDaForcaPage`)**: A tela principal é o único ponto que retém o estado mutável do jogo (`palavraSorteada`, `letrasTentadas`, `quantidadeDeErros`, `historico`). É nela que o método `setState()` é executado.
+- **StatelessWidgets Modulares (`lib/widgets/`)**: Todos os componentes visuais são widgets puros e imutáveis. Eles apenas recebem parâmetros via construtor e notificam eventos para a página pai.
 
-Flutter
-Dart SDK compatível com o projeto
-Android Studio ou outro ambiente compatível com Flutter
-Um dispositivo físico ou emulador Android/iOS, ou navegador compatível
-1. Clone o repositório
-git clone https://github.com/GabrielBeledeli/web_mobile_1b_trabalho_final.git
+---
 
-2. Entre na pasta do projeto
-cd web_mobile_1b_trabalho_final/jogo_da_forca
+## 📄 Páginas (Pages)
 
-3. Instale as dependências
-flutter pub get
+### 1. `JogoDaForcaPage` (`lib/pages/jogo_da_forca_page.dart`)
+É o coração do aplicativo. Gerencia o ciclo de vida da partida, sorteia palavras aleatórias, processa os palpites do usuário e organiza visualmente a coluna com todos os widgets modulares. Na AppBar, disponibiliza ações para reiniciar o jogo e navegar até a tela de histórico.
 
-4. Verifique os dispositivos disponíveis
-flutter devices
+### 2. `HistoryPage` (`lib/pages/history_page.dart`)
+Tela secundária acessada via botão de histórico na AppBar. Recebe a lista de partidas jogadas e renderiza cada registro em cartões estilizados:
+- Partidas com vitória exibem o prefixo 🏆 `VITÓRIA` com o total de erros cometidos.
+- Partidas com derrota exibem o prefixo ❌ `DERROTA` indicando a palavra secreta que não foi adivinhada.
+- Caso não haja partidas salvas, exibe uma mensagem informativa centralizada.
 
-5. Execute a aplicação
-flutter run
+---
 
-Também é possível executar diretamente em uma plataforma específica, por exemplo:
+## 🧩 Widgets Modulares (Widgets)
 
-flutter run -d chrome
+### 1. `ForcaWidget` (`lib/widgets/forca_widget.dart`)
+Responsável pela representação gráfica da forca e das letras descobertas:
+- Utiliza um `AspectRatio(aspectRatio: 1200 / 1080)` para manter a proporção exata das imagens originais da forca sem distorções em telas de diferentes tamanhos.
+- Emprega uma `Stack` com a imagem do estágio atual (`assets/images/forca_$quantidadeDeErros.png`) e uma sobreposição no rodapé da imagem com as linhas (`assets/images/line.png`) e as letras já adivinhadas.
+- Caso a letra ainda não tenha sido tentada pelo jogador, o espaço acima da linha permanece em branco.
 
-ou em um dispositivo Android conectado:
+### 2. `TecladoWidget` (`lib/widgets/teclado_widget.dart`)
+Constrói o teclado alfabético completo organizado em 3 linhas:
+- Linha 1: `Q`, `W`, `E`, `R`, `T`, `Y`, `U`, `I`, `O`, `P`
+- Linha 2: `A`, `S`, `D`, `F`, `G`, `H`, `J`, `K`, `L`
+- Linha 3: `Z`, `X`, `C`, `V`, `B`, `N`, `M`
+- Cada tecla é instanciada individualmente utilizando o `ButtonWidget`.
+- Avalia dinamicamente se a letra já foi jogada para definir cor de fundo (verde ou cinza) e desabilitar o clique.
 
-flutter run -d android
+### 4. `BarraTentativasWidget` (`lib/widgets/barra_tentativas_widget.dart`)
+Cartão localizado na parte superior da tela:
+- Exibe um ícone de coração (`Icons.favorite`) e o contador dinâmico de tentativas restantes:  
+  `Tentativas restantes: (maximoDeErros - quantidadeDeErros) / maximoDeErros`
+- O texto e o ícone alternam para a cor vermelha quando o jogador comete 4 ou mais erros.
 
-🎮 Como jogar
+### 5. `LetrasDigitadasWidget` (`lib/widgets/letras_digitadas_widget.dart`)
+Painel que lista todos os palpites já feitos pelo jogador na partida atual:
+- Conforme as letras são clicadas, gera tags em formato `Wrap` com bordas arredondadas e cores verde para acertos e cinza para erros.
 
-Inicie uma nova partida.
-Uma palavra será selecionada pelo jogo.
-Utilize o teclado disponível na tela para escolher uma letra.
-Caso a letra esteja presente na palavra, ela será revelada.
-Caso a letra esteja incorreta, uma nova parte da forca será desenhada.
-Continue tentando até descobrir a palavra ou atingir o limite de erros.
-Ao finalizar, o resultado da partida será apresentado.
-O histórico pode ser consultado posteriormente.
+### 6. `ResultadoWidget` (`lib/widgets/resultado_widget.dart`)
+Painel flutuante de desfecho da partida:
+- Posicionado sobreposto à forca dentro da `Stack` central.
+- Só é renderizado quando `foiVitoria` ou `foiDerrota` for verdadeiro.
+- Exibe o título ("Parabéns! Você Venceu!" ou "Fim de Jogo!"), a mensagem explicativa revelando a palavra secreta e o botão `"Novo Jogo"`, permitindo reiniciar a partida instantaneamente.
 
-🧩 Componentes
+---
 
-O projeto utiliza widgets separados para facilitar a organização e manutenção do código.
+## ⚙️ Lógica de Negócio e Funções
 
-ForcaWidget
+As principais regras e métodos do jogo estão centralizados no estado `_JogoDaForcaPageState`:
 
-Responsável pela representação visual da forca e do progresso do jogador.
+| Função / Getter | Descrição |
+| :--- | :--- |
+| `iniciarNovaPartida()` | Sorteia aleatoriamente uma nova palavra da lista `listaDePalavras`, limpa o conjunto `letrasTentadas` e zera o contador `quantidadeDeErros`. |
+| `tentarLetra(String letra)` | Chamada ao pressionar qualquer botão do teclado. Adiciona a letra ao conjunto `letrasTentadas`, incrementa `quantidadeDeErros` caso a letra não pertença à palavra e, se a partida terminar, registra o resultado na lista `historico`. |
+| `foiVitoria` | *Getter booleano*: avalia se todos os caracteres de `palavraSorteada` estão contidos no conjunto `letrasTentadas`. |
+| `foiDerrota` | *Getter booleano*: avalia se `quantidadeDeErros >= maximoDeErros` (6 erros). |
 
-TecladoWidget
+---
 
-Implementa o teclado utilizado pelo jogador para realizar as tentativas de letras.
+## 🚀 Como Executar o Projeto
 
-LetrasDigitadasWidget
+### Pré-requisitos
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) instalado (versão 3.x ou superior).
+- Emulador Android/iOS configurado ou dispositivo físico conectado via depuração USB.
 
-Exibe as letras que já foram utilizadas durante a partida.
+### Passos
+1. Acesse a pasta do projeto Flutter:
+   ```bash
+   cd jogo_da_forca
+   ```
 
-BarraTentativasWidget
+2. Obtenha as dependências do Flutter:
+   ```bash
+   flutter pub get
+   ```
 
-Apresenta visualmente a quantidade de tentativas disponíveis.
+3. Verifique se o código está livre de alertas e erros:
+   ```bash
+   flutter analyze
+   ```
 
-ResultadoWidget
+4. Execute o aplicativo no seu dispositivo/emulador:
+   ```bash
+   flutter run
+   ```
 
-Responsável pela apresentação do resultado ao final da partida.
+## 👥 Desenvolvedores
 
-ButtonWidget
+- **Gabriel Beledeli Hul**
+- **Alisson Eraldo**
 
-Componente reutilizável para os botões da aplicação.
+---
 
-📄 Páginas
-
-Jogo da Forca
-
-A página principal da aplicação contém a partida e os elementos necessários para que o usuário possa realizar suas tentativas.
-
-
-🎓 Objetivo acadêmico
-
-Este projeto foi desenvolvido como trabalho final da disciplina de Desenvolvimento de Sistemas para WEB/Mobile IV, tendo como objetivo colocar em prática conhecimentos relacionados ao desenvolvimento de aplicações utilizando Flutter e Dart.
-
-Além da implementação da lógica do jogo, foram aplicados conceitos de:
-
-Desenvolvimento de interfaces;
-Componentização;
-Organização de projetos Flutter;
-Criação de widgets reutilizáveis;
-Navegação entre telas;
-Gerenciamento do estado da aplicação;
-Desenvolvimento multiplataforma.
-
-👨‍💻 Autores
-
-Gabriel Beledeli
-Alisson Eraldo da Silva
-
-GitHub:
-@GabrielBeledeli
-@AlissonnSilva
-
-📚 Repositório
-
-O código-fonte completo do projeto está disponível no GitHub:
-
-https://github.com/GabrielBeledeli/web_mobile_1b_trabalho_final
-
-Desenvolvido com Flutter e Dart.
+Engenharia de Software 6A — Centro Universitário Campo Real
