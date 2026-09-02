@@ -33,38 +33,37 @@ Flutter Lints
 📂 Estrutura do projeto
 web_mobile_1b_trabalho_final/
 │
-├── jogo_da_forca/
-│   │
-│   ├── android/
-│   ├── ios/
-│   ├── linux/
-│   ├── macos/
-│   ├── web/
-│   ├── windows/
-│   │
-│   ├── assets/
-│   │   └── images/
-│   │
-│   ├── lib/
-│   │   ├── pages/
-│   │   │   ├── history_page.dart
-│   │   │   └── jogo_da_forca_page.dart
-│   │   │
-│   │   ├── widgets/
-│   │   │   ├── barra_tentativas_widget.dart
-│   │   │   ├── button_widget.dart
-│   │   │   ├── forca_widget.dart
-│   │   │   ├── letras_digitadas_widget.dart
-│   │   │   ├── resultado_widget.dart
-│   │   │   └── teclado_widget.dart
-│   │   │
-│   │   └── main.dart
-│   │
-│   ├── test/
-│   ├── pubspec.yaml
-│   └── README.md
-│
-└── README.md
+└── jogo_da_forca/
+    │
+    ├── android/
+    ├── ios/
+    ├── linux/
+    ├── macos/
+    ├── web/
+    ├── windows/
+    │
+    ├── assets/
+    │   └── images/
+    │
+    ├── lib/
+    │   ├── pages/
+    │   │   ├── history_page.dart
+    │   │   └── jogo_da_forca_page.dart
+    │   │
+    │   ├── widgets/
+    │   │   ├── barra_tentativas_widget.dart
+    │   │   ├── button_widget.dart
+    │   │   ├── forca_widget.dart
+    │   │   ├── letras_digitadas_widget.dart
+    │   │   ├── resultado_widget.dart
+    │   │   └── teclado_widget.dart
+    │   │
+    │   └── main.dart
+    │
+    ├── test/
+    ├── pubspec.yaml
+    └── README.md
+
 
 
 🚀 Como executar o projeto
